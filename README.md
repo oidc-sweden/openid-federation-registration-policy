@@ -2,7 +2,7 @@
 
 # OpenID Federation Registration Policy 1.0
 
-> TODO
+This specification defines an extension to OpenID Federation that extends the JWT Claims Set of Subordinate Statements by specifying the `registration_policy` Claim. This Claim is intended to hold identifiers for one or more registration policies that were applied when registering the subject of a Subordinate Statement as a trusted Federation Entity.
 
 ## Builds
 
