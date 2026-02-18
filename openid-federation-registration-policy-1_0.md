@@ -1,5 +1,5 @@
 %%%
-title = "OpenID Federation Registration Policy 1.0 - draft 00"
+title = "OpenID Federation Registration Policy 1.0 - draft 01"
 abbrev = "openid-federation-registration-policy"
 ipr = "none"
 workgroup = "OpenID Connect A/B"
@@ -30,13 +30,13 @@ organization="IDsec Solutions"
 
 .# Abstract
 
-This specification defines an extension to OpenID Federation that extends the JWT Claims Set of Subordinate Statements by specifying the `registration_policy` Claim. This Claim is intended to hold identifiers for one or more registration policies that were applied when registering the subject of a Subordinate Statement as a trusted Federation Entity.
+This specification defines an extension to OpenID Federation that extends the JWT Claims Set of Subordinate Statements by specifying the `registration_policy` Claim. This Claim is intended to hold identifiers for one or more registration policies that were applied when registering the subject of a Subordinate Statement as a trusted Entity within the federation.
 
 {mainmatter}
 
 # Introduction
 
-When a Federation Entity is made available under either a Trust Anchor or an Intermediate Entity, the issuance of a Subordinate Statement for this Entity extends trust to the subject Entity from the issuer of the statement.
+When an Entity is made available under either a Trust Anchor or an Intermediate Entity, the issuance of a Subordinate Statement for this Entity extends trust to the subject Entity from the issuer of the statement.
 
 This extension of trust implied by the issuance of a Subordinate Statement is not well defined within OpenID Federation. The basic structure implies that a Leaf Entity is responsible for declaring its own metadata, and that authorizations granted by third parties are provided via Trust Marks. The following aspects of the Leaf Entity are, however, always vouched for by the Immediate Superior Entity issuing the Subordinate Statement:
 
@@ -58,7 +58,7 @@ This specification extends the function of Subordinate Statements and allows the
 
 - Procedures for establishing the ownership of the domain used in URLs of identifiers and endpoints used by the subject Entity.
 
-Superior Entities such as Trust Anchors and Intermediate Entities MAY use registration policies as a constraining mechanism to exclude validation of Trust Chains that do not meet certain registration policy requirements, by using the `constraints` claim of a Subordinate Statement, see  (#registration_policy_constraints).
+Furthermore, Superior Entities, such as Trust Anchors and Intermediate Entities, can use constraint mechanisms to exclude the validation of Trust Chains that do not satisfy specific registration policy requirements.
 
 ## Requirements Notation and Conventions
 
@@ -69,14 +69,13 @@ this document are to be interpreted as described in BCP 14 [@!RFC2119]
 
 ## Terminology
 
-This specification uses the terms "Claim", "JSON Web Token (JWT)", and "JWT Claims Set" as defined by JSON Web Token (JWT) [@!RFC7519], and "Entity", "Entity Identifier", "Trust Anchor", "Federation Entity", "Entity Statement", "Entity Configuration", "Subordinate Statement", "Intermediate Entity", "Leaf Entity", "Subordinate Entity", "Superior Entity", "Immediate Superior Entity", and "Trust Chain" defined in OpenID Federation 1.0 [@!OpenID.Federation].
+This specification uses the terms "Claim", "JSON Web Token (JWT)", and "JWT Claims Set" as defined by JSON Web Token (JWT) [@!RFC7519], and "Entity", "Entity Type", "Entity Identifier", "Trust Anchor", "Entity Statement", "Entity Configuration", "Subordinate Statement", "Intermediate Entity", "Leaf Entity", "Subordinate Entity", "Superior Entity", "Immediate Superior Entity", and "Trust Chain" defined in OpenID Federation 1.0 [@!OpenID.Federation].
 
 # The registration\_policy Claim {#the_registration_policy_claim}
 
 This section defines the `registration_policy` Claim that MAY be included in a Subordinate Statement.
 
-The `registration_policy` Claim holds an array of string values, each specifying the URI identifier of a registration policy that was applied by the issuer of the Subordinate Statement during registration of 
-the subject as a trusted Subordinate Entity.
+The `registration_policy` Claim holds an array of string values, each specifying the URI identifier of a registration policy that was applied by the issuer of the Subordinate Statement during registration of the subject as a trusted Subordinate Entity.
 
 The `registration_policy` Claim MUST NOT be included in an Entity Configuration.
 
@@ -97,68 +96,76 @@ Examples:
 
 Section 6.2, "Constraints", of [@!OpenID.Federation] is extended with the following parameter:
 
-`registration_policy`
-: <br>OPTIONAL. A JSON object that specifies restrictions on registration policies provided in `registration_policy` Claims in Subordinate Statements within a Trust Chain.
+`registration_policy`  
+: <br>OPTIONAL. An array of JSON objects that specifies restrictions on registration policies for Subordinates of the Entity setting the constraint.
 
-Restrictions are expressed in terms of registration policy URI identifiers. They are defined using the `required` and/or `prohibited` members of the `registration_policy` object. Each member contains an array of URIs that are either required or prohibited.
+Each array element defines a constraint rule. A constraint rule contains the following members:
 
-The following constraint rules apply:
+`policy`  
+: <br>REQUIRED. A non-empty array of URI strings representing registration policies. At least one of the listed policy identifiers MUST be declared in the `registration_policy` Claim of a Subordinate Statement for the rule to be satisfied.<br>
 
-- If a Subordinate Statement contains a `registration_policy` Claim with one or more URIs that appear in the `prohibited` array, the constraint check fails.
+`entity_types`  
+: <br>OPTIONAL. A non-empty array of strings representing Entity Types. If present, the rule applies if the subject Entity of a Subordinate Statement has an Entity Type matching any of the values in this array. If absent, the rule applies to all Entity Types.
 
-- If the `required` array is non-empty, the constraint check succeeds if, and only if, the Subordinate Statement contains at least one URI that matches a value in the `required` array.
+Each rule expresses an additional requirement. All applicable rules MUST be satisfied for the constraint check to succeed.
 
+The Entity Type, or types, of the subject Entity in a Subordinate Statement within a Trust Chain are determined as follows:
+
+- If the subject is itself the issuer of the next Subordinate Statement in the chain, the type is `federation_entity`.
+
+- If the subject is the issuer, and subject, of an Entity Configuration that follows the Subordinate Statement in the chain, the type, or types, of the subject are the metadata types declared in that Entity Configuration.
+
+The constraint evaluation process is as follows:
+
+- For each constraint rule in the `registration_policy` array:
+
+  - If at least one of the Entity Types of the subject of the Subordinate Statement matches one of the values in `entity_types`, or if `entity_types` is absent, the constraint check for that rule succeeds if, and only if, at least one of the URIs listed in `policy` appears in the Subordinate Statement’s `registration_policy` Claim.
+  
+  - If `entity_types` is present and none of the Entity Types of the subject of the Subordinate Statement match any of the values given in `entity_types`, the constraint check is not applicable to that Statement.
+    
+- The overall constraint check succeeds only if all applicable rules succeed.
 
 ```json=
 {
-  "registration_policy" : {
-    "required" : [
-      "https://example.com/policy/verified",
-      "https://example.com/policy/secure"
-    ],
-    "prohibited" : [
-      "https://example.com/policy/open"
-    ]
-  }
+  "registration_policy" : [
+    {
+      "policy" : [ "https://example.com/policy/default" ]
+    },
+    {
+      "entity_types" : [ "openid_provider", "oauth_authorization_server" ],
+      "policy" : [
+        "https://example.com/policy/1",
+        "https://example.com/policy/2"
+      ]
+    },
+    {
+      "entity_types" : [ "openid_relying_party" ],
+      "policy" : [ "https://example.com/policy/rp" ]
+    }
+  ]
 }
 ```
 
-**Example**: A constraint for registration policies stating that at least one of the policies `https://example.com/policy/verified` or `https://example.com/policy/secure` must appear as values to a Subordinate Statement's `registration_policy` Claim, and that the `https://example.com/policy/open` must not appear.
+**Example:** A registration policy constraint expressing the following:
+
+- All entities, regardless of their Entity Types, MUST have been registered under the policy `https://example.com/policy/default`.
+
+- All OpenID Connect OpenID Providers and OAuth 2.0 Authorization Servers MUST have been registered under either the `https://example.com/policy/1` policy or the `https://example.com/policy/2` policy, or both.
+
+- All OpenID Connect Relying Parties MUST have been registered under the policy `https://example.com/policy/rp`.
 
 # Acknowledgments
 
 We would like to thank the following individuals for their comments, ideas, and contributions to this implementation profile and to the initial set of implementations.
 
-- Leif Johansson, Siros
+- Henric Norlander, Nod9
 
 {backmatter}
-
-<reference anchor="OpenID.Core" target="http://openid.net/specs/openid-connect-core-1_0.html">
-  <front>
-    <title>OpenID Connect Core 1.0 incorporating errata set 2</title>
-    <author initials="N." surname="Sakimura" fullname="Nat Sakimura">
-      <organization>NRI</organization>
-    </author>
-    <author initials="J." surname="Bradley" fullname="John Bradley">
-      <organization>Ping Identity</organization>
-    </author>
-    <author initials="M." surname="Jones" fullname="Michael B. Jones">
-      <organization>Microsoft</organization>
-    </author>
-    <author initials="B." surname="de Medeiros" fullname="Breno de Medeiros">
-      <organization>Google</organization>
-    </author>
-    <author initials="C." surname="Mortimore" fullname="Chuck Mortimore">
-      <organization>Salesforce</organization>
-    </author>
-   <date day="15" month="December" year="2023"/>
-  </front>
-</reference>
 
 <reference anchor="OpenID.Federation" target="https://openid.net/specs/openid-federation-1_0.html">
         <front>
           <title>OpenID Federation 1.0</title>
-		  <author fullname="R. Hedberg, Ed.">
+		  <author fullname="Roland Hedberg">
             <organization>independent</organization>
           </author>
           <author fullname="Michael B. Jones">
@@ -176,7 +183,7 @@ We would like to thank the following individuals for their comments, ideas, and 
           <author fullname="Vladimir Dzhuvinov">
             <organization>Connect2id</organization>
           </author>
-          <date day="15" month="October" year="2025"/>
+          <date day="17" month="February" year="2026"/>
         </front>
 </reference>
 
@@ -191,6 +198,10 @@ The technology described in this specification was made available from contribut
 # Document History
 
    [[ To be removed from the final specification ]]
+   
+   -01
+
+   *  Updated section on constraints, where it is now possible to specify the entity types to which a constraint applies.
 
    -00 
 
