@@ -73,7 +73,7 @@ This specification uses the terms "Claim", "JSON Web Token (JWT)", and "JWT Clai
 
 # The registration\_policy Claim {#the_registration_policy_claim}
 
-This section defines the `registration_policy` Claim that MAY be included in a Subordinate Statement.
+This section defines the `registration_policy` Claim that **MAY** be included in a Subordinate Statement.
 
 The `registration_policy` Claim holds an array of string values, each specifying the URI identifier of a registration policy that was applied by the issuer of the Subordinate Statement during registration of the subject as a trusted Subordinate Entity.
 
@@ -102,18 +102,18 @@ Section 6.2, "Constraints", of [@!OpenID.Federation] is extended with the follow
 Each array element defines a constraint rule. A constraint rule contains the following members:
 
 `policy`  
-: <br>REQUIRED. A non-empty array of URI strings representing registration policies. At least one of the listed policy identifiers MUST be declared in the `registration_policy` Claim of a Subordinate Statement for the rule to be satisfied.<br>
+: <br>**REQUIRED**. A non-empty array of URI strings representing registration policies. At least one of the listed policy identifiers MUST be declared in the `registration_policy` Claim of a Subordinate Statement for the rule to be satisfied.<br>
 
 `entity_types`  
-: <br>OPTIONAL. A non-empty array of strings representing Entity Types. If present, the rule applies if the subject Entity of a Subordinate Statement has an Entity Type matching any of the values in this array. If absent, the rule applies to all Entity Types.
+: <br>**OPTIONAL**. A non-empty array of strings representing Entity Types. If present, the rule applies if the subject Entity of a Subordinate Statement has an Entity Type matching any of the values in this array. If absent, the rule applies to all Entity Types.
 
 Each rule expresses an additional requirement. All applicable rules MUST be satisfied for the constraint check to succeed.
 
-The Entity Type, or types, of the subject Entity in a Subordinate Statement within a Trust Chain are determined as follows:
+The Entity Type, or types, of the subject Entity in an Entity Statement within a Trust Chain are determined as follows:
 
-- If the subject is itself the issuer of the next Subordinate Statement in the chain, the type is `federation_entity`.
+- If the subject Entity is the issuer, but not the subject, of the next Entity Statement in the chain, which is therefore a Subordinate Statement, the type is `federation_entity`.
 
-- If the subject is the issuer, and subject, of an Entity Configuration that follows the Subordinate Statement in the chain, the type, or types, of the subject are the metadata types declared in that Entity Configuration.
+- If the subject Entity is both the issuer and the subject of the next Entity Statement in the chain, that statement is an Entity Configuration, and the type, or types, of the subject Entity are the metadata types declared in that Entity Configuration.
 
 The constraint evaluation process is as follows:
 
@@ -148,11 +148,11 @@ The constraint evaluation process is as follows:
 
 **Example:** A registration policy constraint expressing the following:
 
-- All entities, regardless of their Entity Types, MUST have been registered under the policy `https://example.com/policy/default`.
+- All entities, regardless of their Entity Types, **MUST** have been registered under the policy `https://example.com/policy/default`.
 
-- All OpenID Connect OpenID Providers and OAuth 2.0 Authorization Servers MUST have been registered under either the `https://example.com/policy/1` policy or the `https://example.com/policy/2` policy, or both.
+- All OpenID Connect OpenID Providers and OAuth 2.0 Authorization Servers **MUST** have been registered under either the `https://example.com/policy/1` policy or the `https://example.com/policy/2` policy, or both.
 
-- All OpenID Connect Relying Parties MUST have been registered under the policy `https://example.com/policy/rp`.
+- All OpenID Connect Relying Parties **MUST** have been registered under the policy `https://example.com/policy/rp`.
 
 # Acknowledgments
 
