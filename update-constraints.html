@@ -1206,7 +1206,7 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left"></td>
 <td class="center">openid-federation-registration-policy</td>
-<td class="right">February 2026</td>
+<td class="right">March 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Lindström &amp; Santesson</td>
@@ -1221,7 +1221,7 @@ li > p:last-of-type:only-child {
 <dd class="workgroup">OpenID Connect A/B</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-19" class="published">19 February 2026</time>
+<time datetime="2026-03-30" class="published">30 March 2026</time>
     </dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
@@ -1366,64 +1366,63 @@ this document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2
       <h2 id="name-registration-policy-constra">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-registration-policy-constra" class="section-name selfRef">Registration Policy Constraints</a>
       </h2>
-<p id="section-3-1">Section 6.2, "Constraints", of <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> is extended with the following parameter:<a href="#section-3-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlCompact dlParallel" id="section-3-2">
-        <dt id="section-3-2.1">
+<p id="section-3-1">Registration policy constraints apply to registration of Subordinate Entities in the chain. This means that all Subordinate Statements that appear below the Entity Statement that include this constraint MUST satisfy the constraint rule. This constraint does not apply to the Entity Configuration statement that terminates the chain.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Section 6.2, "Constraints", of <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> is extended with the following parameter:<a href="#section-3-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-3-3">
+        <dt id="section-3-3.1">
 <code>registration_policy</code><br>
         </dt>
-        <dd style="margin-left: 1.5em" id="section-3-2.2">
+        <dd style="margin-left: 1.5em" id="section-3-3.2">
           <br>
-OPTIONAL. An array of JSON objects that specifies restrictions on registration policies for Subordinates of the Entity setting the constraint.<a href="#section-3-2.2" class="pilcrow">¶</a>
+OPTIONAL. An array of JSON objects that specifies restrictions on registration policies for Subordinates of the Entity setting the constraint.<a href="#section-3-3.2" class="pilcrow">¶</a>
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-3-3">Each array element defines a constraint rule. A constraint rule contains the following members:<a href="#section-3-3" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlCompact dlParallel" id="section-3-4">
-        <dt id="section-3-4.1">
+<p id="section-3-4">Each array element defines a constraint rule. A constraint rule contains the following members:<a href="#section-3-4" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-3-5">
+        <dt id="section-3-5.1">
 <code>policy</code><br>
         </dt>
-        <dd style="margin-left: 1.5em" id="section-3-4.2">
+        <dd style="margin-left: 1.5em" id="section-3-5.2">
           <br>
-          <span class="bcp14">REQUIRED</span>. A non-empty array of URI strings representing registration policies. At least one of the listed policy identifiers MUST be declared in the <code>registration_policy</code> Claim of a Subordinate Statement for the rule to be satisfied.<br><a href="#section-3-4.2" class="pilcrow">¶</a>
+          <span class="bcp14">REQUIRED</span>. A non-empty array of URI strings representing registration policies. At least one of the listed policy identifiers MUST be declared in the <code>registration_policy</code> Claim of a Subordinate Statement for the rule to be satisfied.<br><a href="#section-3-5.2" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
-<dt id="section-3-4.3">
+<dt id="section-3-5.3">
 <code>entity_types</code><br>
         </dt>
-        <dd style="margin-left: 1.5em" id="section-3-4.4">
+        <dd style="margin-left: 1.5em" id="section-3-5.4">
           <br>
-          <span class="bcp14">OPTIONAL</span>. A non-empty array of strings representing Entity Types. If present, the rule applies if the subject Entity of a Subordinate Statement has an Entity Type matching any of the values in this array. If absent, the rule applies to all Entity Types.<a href="#section-3-4.4" class="pilcrow">¶</a>
+          <span class="bcp14">OPTIONAL</span>. A non-empty array of strings representing Entity Types. If present, the rule applies if the subject Entity of a Subordinate Statement has an Entity Type matching any of the values in this array. If absent, the rule applies to all Entity Types.<a href="#section-3-5.4" class="pilcrow">¶</a>
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-3-5">Each rule expresses an additional requirement. All applicable rules MUST be satisfied for the constraint check to succeed.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">The Entity Type, or types, of the subject Entity in an Entity Statement within a Trust Chain are determined as follows:<a href="#section-3-6" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3-7.1">
-          <p id="section-3-7.1.1">If the subject Entity is the issuer, but not the subject, of the next Entity Statement in the chain, which is therefore a Subordinate Statement, the type is <code>federation_entity</code>.<a href="#section-3-7.1.1" class="pilcrow">¶</a></p>
+<p id="section-3-6">Each rule expresses an additional requirement. All applicable rules MUST be satisfied for the constraint check to succeed.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">The Entity Type, or types, of the subject Entity in an Entity Statement within a Trust Chain are determined as follows:<a href="#section-3-7" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-3-8.1">If the subject Entity is the issuer of a Subordinate Statement of the chain, its type is <code>federation_entity</code>.<a href="#section-3-8.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-7.2">
-          <p id="section-3-7.2.1">If the subject Entity is both the issuer and the subject of the next Entity Statement in the chain, that statement is an Entity Configuration, and the type, or types, of the subject Entity are the metadata types declared in that Entity Configuration.<a href="#section-3-7.2.1" class="pilcrow">¶</a></p>
+        <li class="compact" id="section-3-8.2">If the subject Entity is the issuer of the final Entity Configuration of the chain, its type is determined by the metadata types declared in that Entity Configuration.<a href="#section-3-8.2" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-3-8">The constraint evaluation process is as follows:<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9">The constraint evaluation process is as follows:<a href="#section-3-9" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-9.1">
-          <p id="section-3-9.1.1">For each constraint rule in the <code>registration_policy</code> array:<a href="#section-3-9.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3-10.1">
+          <p id="section-3-10.1.1">For each constraint rule in the <code>registration_policy</code> array:<a href="#section-3-10.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-9.1.2.1">
-              <p id="section-3-9.1.2.1.1">If at least one of the Entity Types of the subject of the Subordinate Statement matches one of the values in <code>entity_types</code>, or if <code>entity_types</code> is absent, the constraint check for that rule succeeds if, and only if, at least one of the URIs listed in <code>policy</code> appears in the Subordinate Statement’s <code>registration_policy</code> Claim.<a href="#section-3-9.1.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3-10.1.2.1">
+              <p id="section-3-10.1.2.1.1">If at least one of the Entity Types of the subject of the Subordinate Statement matches one of the values in <code>entity_types</code>, or if <code>entity_types</code> is absent, the constraint check for that rule succeeds if, and only if, at least one of the URIs listed in <code>policy</code> appears in the Subordinate Statement’s <code>registration_policy</code> Claim.<a href="#section-3-10.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3-9.1.2.2">
-              <p id="section-3-9.1.2.2.1">If <code>entity_types</code> is present and none of the Entity Types of the subject of the Subordinate Statement match any of the values given in <code>entity_types</code>, the constraint check is not applicable to that Statement.<a href="#section-3-9.1.2.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3-10.1.2.2">
+              <p id="section-3-10.1.2.2.1">If <code>entity_types</code> is present and none of the Entity Types of the subject of the Subordinate Statement match any of the values given in <code>entity_types</code>, the constraint check is not applicable to that Statement.<a href="#section-3-10.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </li>
-        <li class="normal" id="section-3-9.2">
-          <p id="section-3-9.2.1">The overall constraint check succeeds only if all applicable rules succeed.<a href="#section-3-9.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-3-10.2">
+          <p id="section-3-10.2.1">The overall constraint check succeeds only if all applicable rules succeed.<a href="#section-3-10.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<div class="lang-json= sourcecode" id="section-3-10">
+<div class="lang-json= sourcecode" id="section-3-11">
 <pre>{
   "registration_policy" : [
     {
@@ -1442,18 +1441,18 @@ OPTIONAL. An array of JSON objects that specifies restrictions on registration p
     }
   ]
 }
-</pre><a href="#section-3-10" class="pilcrow">¶</a>
+</pre><a href="#section-3-11" class="pilcrow">¶</a>
 </div>
-<p id="section-3-11"><strong>Example:</strong> A registration policy constraint expressing the following:<a href="#section-3-11" class="pilcrow">¶</a></p>
+<p id="section-3-12"><strong>Example:</strong> A registration policy constraint expressing the following:<a href="#section-3-12" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-12.1">
-          <p id="section-3-12.1.1">All entities, regardless of their Entity Types, <span class="bcp14">MUST</span> have been registered under the policy <code>https://example.com/policy/default</code>.<a href="#section-3-12.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3-13.1">
+          <p id="section-3-13.1.1">All entities, regardless of their Entity Types, <span class="bcp14">MUST</span> have been registered under the policy <code>https://example.com/policy/default</code>.<a href="#section-3-13.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-12.2">
-          <p id="section-3-12.2.1">All OpenID Connect OpenID Providers and OAuth 2.0 Authorization Servers <span class="bcp14">MUST</span> have been registered under either the <code>https://example.com/policy/1</code> policy or the <code>https://example.com/policy/2</code> policy, or both.<a href="#section-3-12.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-3-13.2">
+          <p id="section-3-13.2.1">All OpenID Connect OpenID Providers and OAuth 2.0 Authorization Servers <span class="bcp14">MUST</span> have been registered under either the <code>https://example.com/policy/1</code> policy or the <code>https://example.com/policy/2</code> policy, or both.<a href="#section-3-13.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-12.3">
-          <p id="section-3-12.3.1">All OpenID Connect Relying Parties <span class="bcp14">MUST</span> have been registered under the policy <code>https://example.com/policy/rp</code>.<a href="#section-3-12.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-3-13.3">
+          <p id="section-3-13.3.1">All OpenID Connect Relying Parties <span class="bcp14">MUST</span> have been registered under the policy <code>https://example.com/policy/rp</code>.<a href="#section-3-13.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
