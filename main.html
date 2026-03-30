@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>OpenID Federation Registration Policy 1.0 - draft 00</title>
+<title>OpenID Federation Registration Policy 1.0 - draft 01</title>
 <meta content="Martin Lindström" name="author">
 <meta content="Stefan Santesson" name="author">
 <meta content="
-       This specification defines an extension to OpenID Federation that extends the JWT Claims Set of Subordinate Statements by specifying the  registration_policy  Claim. This Claim is intended to hold identifiers for one or more registration policies that were applied when registering the subject of a Subordinate Statement as a trusted Federation Entity. 
+       This specification defines an extension to OpenID Federation that extends the JWT Claims Set of Subordinate Statements by specifying the  registration_policy  Claim. This Claim is intended to hold identifiers for one or more registration policies that were applied when registering the subject of a Subordinate Statement as a trusted Entity within the federation. 
     " name="description">
 <meta content="xml2rfc 3.16.0" name="generator">
 <meta content="security" name="keyword">
@@ -1206,7 +1206,7 @@ li > p:last-of-type:only-child {
 <thead><tr>
 <td class="left"></td>
 <td class="center">openid-federation-registration-policy</td>
-<td class="right">January 2026</td>
+<td class="right">March 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Lindström &amp; Santesson</td>
@@ -1221,7 +1221,7 @@ li > p:last-of-type:only-child {
 <dd class="workgroup">OpenID Connect A/B</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-01-12" class="published">12 January 2026</time>
+<time datetime="2026-03-30" class="published">30 March 2026</time>
     </dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
@@ -1236,10 +1236,10 @@ li > p:last-of-type:only-child {
 </dd>
 </dl>
 </div>
-<h1 id="title">OpenID Federation Registration Policy 1.0 - draft 00</h1>
+<h1 id="title">OpenID Federation Registration Policy 1.0 - draft 01</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This specification defines an extension to OpenID Federation that extends the JWT Claims Set of Subordinate Statements by specifying the <code>registration_policy</code> Claim. This Claim is intended to hold identifiers for one or more registration policies that were applied when registering the subject of a Subordinate Statement as a trusted Federation Entity.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This specification defines an extension to OpenID Federation that extends the JWT Claims Set of Subordinate Statements by specifying the <code>registration_policy</code> Claim. This Claim is intended to hold identifiers for one or more registration policies that were applied when registering the subject of a Subordinate Statement as a trusted Entity within the federation.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <div id="toc">
 <section id="section-toc.1">
@@ -1288,7 +1288,7 @@ li > p:last-of-type:only-child {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">When a Federation Entity is made available under either a Trust Anchor or an Intermediate Entity, the issuance of a Subordinate Statement for this Entity extends trust to the subject Entity from the issuer of the statement.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">When an Entity is made available under either a Trust Anchor or an Intermediate Entity, the issuance of a Subordinate Statement for this Entity extends trust to the subject Entity from the issuer of the statement.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This extension of trust implied by the issuance of a Subordinate Statement is not well defined within OpenID Federation. The basic structure implies that a Leaf Entity is responsible for declaring its own metadata, and that authorizations granted by third parties are provided via Trust Marks. The following aspects of the Leaf Entity are, however, always vouched for by the Immediate Superior Entity issuing the Subordinate Statement:<a href="#section-1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-3.1">
@@ -1317,7 +1317,7 @@ li > p:last-of-type:only-child {
           <p id="section-1-6.4.1">Procedures for establishing the ownership of the domain used in URLs of identifiers and endpoints used by the subject Entity.<a href="#section-1-6.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-1-7">Superior Entities such as Trust Anchors and Intermediate Entities MAY use registration policies as a constraining mechanism to exclude validation of Trust Chains that do not meet certain registration policy requirements, by using the <code>constraints</code> claim of a Subordinate Statement, see  <a href="#registration_policy_constraints" class="auto internal xref">Section 3</a>.<a href="#section-1-7" class="pilcrow">¶</a></p>
+<p id="section-1-7">Furthermore, Superior Entities, such as Trust Anchors and Intermediate Entities, can use constraint mechanisms to exclude the validation of Trust Chains that do not satisfy specific registration policy requirements.<a href="#section-1-7" class="pilcrow">¶</a></p>
 <div id="requirements-notation-and-conventions">
 <section id="section-1.1">
         <h3 id="name-requirements-notation-and-c">
@@ -1334,7 +1334,7 @@ this document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2
         <h3 id="name-terminology">
 <a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
         </h3>
-<p id="section-1.2-1">This specification uses the terms "Claim", "JSON Web Token (JWT)", and "JWT Claims Set" as defined by JSON Web Token (JWT) <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>, and "Entity", "Entity Identifier", "Trust Anchor", "Federation Entity", "Entity Statement", "Entity Configuration", "Subordinate Statement", "Intermediate Entity", "Leaf Entity", "Subordinate Entity", "Superior Entity", "Immediate Superior Entity", and "Trust Chain" defined in OpenID Federation 1.0 <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-1">This specification uses the terms "Claim", "JSON Web Token (JWT)", and "JWT Claims Set" as defined by JSON Web Token (JWT) <span>[<a href="#RFC7519" class="cite xref">RFC7519</a>]</span>, and "Entity", "Entity Type", "Entity Identifier", "Trust Anchor", "Entity Statement", "Entity Configuration", "Subordinate Statement", "Intermediate Entity", "Leaf Entity", "Subordinate Entity", "Superior Entity", "Immediate Superior Entity", and "Trust Chain" defined in OpenID Federation 1.0 <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span>.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1344,9 +1344,8 @@ this document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2
       <h2 id="name-the-registration_policy-cla">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-the-registration_policy-cla" class="section-name selfRef">The registration_policy Claim</a>
       </h2>
-<p id="section-2-1">This section defines the <code>registration_policy</code> Claim that MAY be included in a Subordinate Statement.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">The <code>registration_policy</code> Claim holds an array of string values, each specifying the URI identifier of a registration policy that was applied by the issuer of the Subordinate Statement during registration of
-the subject as a trusted Subordinate Entity.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-1">This section defines the <code>registration_policy</code> Claim that <span class="bcp14">MAY</span> be included in a Subordinate Statement.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">The <code>registration_policy</code> Claim holds an array of string values, each specifying the URI identifier of a registration policy that was applied by the issuer of the Subordinate Statement during registration of the subject as a trusted Subordinate Entity.<a href="#section-2-2" class="pilcrow">¶</a></p>
 <p id="section-2-3">The <code>registration_policy</code> Claim MUST NOT be included in an Entity Configuration.<a href="#section-2-3" class="pilcrow">¶</a></p>
 <p id="section-2-4">Examples:<a href="#section-2-4" class="pilcrow">¶</a></p>
 <div class="lang-json= sourcecode" id="section-2-5">
@@ -1367,40 +1366,95 @@ the subject as a trusted Subordinate Entity.<a href="#section-2-2" class="pilcro
       <h2 id="name-registration-policy-constra">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-registration-policy-constra" class="section-name selfRef">Registration Policy Constraints</a>
       </h2>
-<p id="section-3-1">Section 6.2, "Constraints", of <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> is extended with the following parameter:<a href="#section-3-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlCompact dlParallel" id="section-3-2">
-        <dt id="section-3-2.1"><code>registration_policy</code></dt>
-        <dd style="margin-left: 1.5em" id="section-3-2.2">
+<p id="section-3-1">Registration policy constraints apply to registration of Subordinate Entities in the chain. This means that all Subordinate Statements that appear below the Entity Statement that include this constraint MUST satisfy the constraint rule. This constraint does not apply to the Entity Configuration statement that terminates the chain.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Section 6.2, "Constraints", of <span>[<a href="#OpenID.Federation" class="cite xref">OpenID.Federation</a>]</span> is extended with the following parameter:<a href="#section-3-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-3-3">
+        <dt id="section-3-3.1">
+<code>registration_policy</code><br>
+        </dt>
+        <dd style="margin-left: 1.5em" id="section-3-3.2">
           <br>
-OPTIONAL. A JSON object that specifies restrictions on registration policies provided in <code>registration_policy</code> Claims in Subordinate Statements within a Trust Chain.<a href="#section-3-2.2" class="pilcrow">¶</a>
+OPTIONAL. An array of JSON objects that specifies restrictions on registration policies for Subordinates of the Entity setting the constraint.<a href="#section-3-3.2" class="pilcrow">¶</a>
 </dd>
       <dd class="break"></dd>
 </dl>
-<p id="section-3-3">Restrictions are expressed in terms of registration policy URI identifiers. They are defined using the <code>required</code> and/or <code>prohibited</code> members of the <code>registration_policy</code> object. Each member contains an array of URIs that are either required or prohibited.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">The following constraint rules apply:<a href="#section-3-4" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3-5.1">
-          <p id="section-3-5.1.1">If a Subordinate Statement contains a <code>registration_policy</code> Claim with one or more URIs that appear in the <code>prohibited</code> array, the constraint check fails.<a href="#section-3-5.1.1" class="pilcrow">¶</a></p>
+<p id="section-3-4">Each array element defines a constraint rule. A constraint rule contains the following members:<a href="#section-3-4" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-3-5">
+        <dt id="section-3-5.1">
+<code>policy</code><br>
+        </dt>
+        <dd style="margin-left: 1.5em" id="section-3-5.2">
+          <br>
+          <span class="bcp14">REQUIRED</span>. A non-empty array of URI strings representing registration policies. At least one of the listed policy identifiers MUST be declared in the <code>registration_policy</code> Claim of a Subordinate Statement for the rule to be satisfied.<br><a href="#section-3-5.2" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-5.3">
+<code>entity_types</code><br>
+        </dt>
+        <dd style="margin-left: 1.5em" id="section-3-5.4">
+          <br>
+          <span class="bcp14">OPTIONAL</span>. A non-empty array of strings representing Entity Types. If present, the rule applies if the subject Entity of a Subordinate Statement has an Entity Type matching any of the values in this array. If absent, the rule applies to all Entity Types.<a href="#section-3-5.4" class="pilcrow">¶</a>
+</dd>
+      <dd class="break"></dd>
+</dl>
+<p id="section-3-6">Each rule expresses an additional requirement. All applicable rules MUST be satisfied for the constraint check to succeed.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">The Entity Type, or types, of the subject Entity in an Entity Statement within a Trust Chain are determined as follows:<a href="#section-3-7" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-3-8.1">If the subject Entity is the issuer of a Subordinate Statement of the chain, its type is <code>federation_entity</code>.<a href="#section-3-8.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-5.2">
-          <p id="section-3-5.2.1">If the <code>required</code> array is non-empty, the constraint check succeeds if, and only if, the Subordinate Statement contains at least one URI that matches a value in the <code>required</code> array.<a href="#section-3-5.2.1" class="pilcrow">¶</a></p>
+        <li class="compact" id="section-3-8.2">If the subject Entity is the issuer of the final Entity Configuration of the chain, its type is determined by the metadata types declared in that Entity Configuration.<a href="#section-3-8.2" class="pilcrow">¶</a>
 </li>
       </ul>
-<div class="lang-json= sourcecode" id="section-3-6">
+<p id="section-3-9">The constraint evaluation process is as follows:<a href="#section-3-9" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-10.1">
+          <p id="section-3-10.1.1">For each constraint rule in the <code>registration_policy</code> array:<a href="#section-3-10.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-10.1.2.1">
+              <p id="section-3-10.1.2.1.1">If at least one of the Entity Types of the subject of the Subordinate Statement matches one of the values in <code>entity_types</code>, or if <code>entity_types</code> is absent, the constraint check for that rule succeeds if, and only if, at least one of the URIs listed in <code>policy</code> appears in the Subordinate Statement’s <code>registration_policy</code> Claim.<a href="#section-3-10.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3-10.1.2.2">
+              <p id="section-3-10.1.2.2.1">If <code>entity_types</code> is present and none of the Entity Types of the subject of the Subordinate Statement match any of the values given in <code>entity_types</code>, the constraint check is not applicable to that Statement.<a href="#section-3-10.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+</li>
+        <li class="normal" id="section-3-10.2">
+          <p id="section-3-10.2.1">The overall constraint check succeeds only if all applicable rules succeed.<a href="#section-3-10.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<div class="lang-json= sourcecode" id="section-3-11">
 <pre>{
-  "registration_policy" : {
-    "required" : [
-      "https://example.com/policy/verified",
-      "https://example.com/policy/secure"
-    ],
-    "prohibited" : [
-      "https://example.com/policy/open"
-    ]
-  }
+  "registration_policy" : [
+    {
+      "policy" : [ "https://example.com/policy/default" ]
+    },
+    {
+      "entity_types" : [ "openid_provider", "oauth_authorization_server" ],
+      "policy" : [
+        "https://example.com/policy/1",
+        "https://example.com/policy/2"
+      ]
+    },
+    {
+      "entity_types" : [ "openid_relying_party" ],
+      "policy" : [ "https://example.com/policy/rp" ]
+    }
+  ]
 }
-</pre><a href="#section-3-6" class="pilcrow">¶</a>
+</pre><a href="#section-3-11" class="pilcrow">¶</a>
 </div>
-<p id="section-3-7"><strong>Example</strong>: A constraint for registration policies stating that at least one of the policies <code>https://example.com/policy/verified</code> or <code>https://example.com/policy/secure</code> must appear as values to a Subordinate Statement's <code>registration_policy</code> Claim, and that the <code>https://example.com/policy/open</code> must not appear.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-12"><strong>Example:</strong> A registration policy constraint expressing the following:<a href="#section-3-12" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-13.1">
+          <p id="section-3-13.1.1">All entities, regardless of their Entity Types, must have been registered under the policy <code>https://example.com/policy/default</code>.<a href="#section-3-13.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-13.2">
+          <p id="section-3-13.2.1">All OpenID Connect OpenID Providers and OAuth 2.0 Authorization Servers must have been registered under either the <code>https://example.com/policy/1</code> policy or the <code>https://example.com/policy/2</code> policy, or both.<a href="#section-3-13.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-13.3">
+          <p id="section-3-13.3.1">All OpenID Connect Relying Parties must have been registered under the policy <code>https://example.com/policy/rp</code>.<a href="#section-3-13.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 </section>
 </div>
 <div id="acknowledgments">
@@ -1410,7 +1464,7 @@ OPTIONAL. A JSON object that specifies restrictions on registration policies pro
       </h2>
 <p id="section-4-1">We would like to thank the following individuals for their comments, ideas, and contributions to this implementation profile and to the initial set of implementations.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ul class="compact">
-<li class="compact" id="section-4-2.1">Leif Johansson, Siros<a href="#section-4-2.1" class="pilcrow">¶</a>
+<li class="compact" id="section-4-2.1">Henric Norlander, Nod9<a href="#section-4-2.1" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
@@ -1422,7 +1476,7 @@ OPTIONAL. A JSON object that specifies restrictions on registration policies pro
 <dl class="references">
 <dt id="OpenID.Federation">[OpenID.Federation]</dt>
       <dd>
-<span class="refAuthor">Ed., R. H.</span>, <span class="refAuthor">Jones, M. B.</span>, <span class="refAuthor">Solberg, A.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Marco, G. D.</span>, and <span class="refAuthor">V. Dzhuvinov</span>, <span class="refTitle">"OpenID Federation 1.0"</span>, <time datetime="2025-10-15" class="refDate">15 October 2025</time>, <span>&lt;<a href="https://openid.net/specs/openid-federation-1_0.html">https://openid.net/specs/openid-federation-1_0.html</a>&gt;</span>. </dd>
+<span class="refAuthor">Hedberg, R.</span>, <span class="refAuthor">Jones, M. B.</span>, <span class="refAuthor">Solberg, A.</span>, <span class="refAuthor">Bradley, J.</span>, <span class="refAuthor">Marco, G. D.</span>, and <span class="refAuthor">V. Dzhuvinov</span>, <span class="refTitle">"OpenID Federation 1.0"</span>, <time datetime="2026-02-17" class="refDate">17 February 2026</time>, <span>&lt;<a href="https://openid.net/specs/openid-federation-1_0.html">https://openid.net/specs/openid-federation-1_0.html</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
       <dd>
@@ -1454,9 +1508,14 @@ OPTIONAL. A JSON object that specifies restrictions on registration policies pro
 <a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-document-history" class="section-name selfRef">Document History</a>
       </h2>
 <p id="appendix-B-1">[[ To be removed from the final specification ]]<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">-00<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">-01<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 <ul class="compact">
-<li class="compact" id="appendix-B-3.1">Initial version<a href="#appendix-B-3.1" class="pilcrow">¶</a>
+<li class="compact" id="appendix-B-3.1">Updated section on constraints, where it is now possible to specify the entity types to which a constraint applies.<a href="#appendix-B-3.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="appendix-B-4">-00<a href="#appendix-B-4" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="appendix-B-5.1">Initial version<a href="#appendix-B-5.1" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
