@@ -149,11 +149,11 @@ The constraint evaluation process is as follows:
 
 **Example:** A registration policy constraint expressing the following:
 
-- All entities, regardless of their Entity Types, **MUST** have been registered under the policy `https://example.com/policy/default`.
+- All entities, regardless of their Entity Types, must have been registered under the policy `https://example.com/policy/default`.
 
-- All OpenID Connect OpenID Providers and OAuth 2.0 Authorization Servers **MUST** have been registered under either the `https://example.com/policy/1` policy or the `https://example.com/policy/2` policy, or both.
+- All OpenID Connect OpenID Providers and OAuth 2.0 Authorization Servers must have been registered under either the `https://example.com/policy/1` policy or the `https://example.com/policy/2` policy, or both.
 
-- All OpenID Connect Relying Parties **MUST** have been registered under the policy `https://example.com/policy/rp`.
+- All OpenID Connect Relying Parties must have been registered under the policy `https://example.com/policy/rp`.
 
 # Acknowledgments
 
