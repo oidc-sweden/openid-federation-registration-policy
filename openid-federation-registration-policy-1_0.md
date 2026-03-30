@@ -94,6 +94,8 @@ Examples:
 
 # Registration Policy Constraints {#registration_policy_constraints}
 
+Registration policy constraints apply to registration of Subordinate Entities in the chain. This means that all Subordinate Statements that appear below the Entity Statement that include this constraint MUST satisfy the constraint rule. This constraint does not apply to the Entity Configuration statement that terminates the chain.
+
 Section 6.2, "Constraints", of [@!OpenID.Federation] is extended with the following parameter:
 
 `registration_policy`  
@@ -111,9 +113,8 @@ Each rule expresses an additional requirement. All applicable rules MUST be sati
 
 The Entity Type, or types, of the subject Entity in an Entity Statement within a Trust Chain are determined as follows:
 
-- If the subject Entity is the issuer, but not the subject, of the next Entity Statement in the chain, which is therefore a Subordinate Statement, the type is `federation_entity`.
-
-- If the subject Entity is both the issuer and the subject of the next Entity Statement in the chain, that statement is an Entity Configuration, and the type, or types, of the subject Entity are the metadata types declared in that Entity Configuration.
+- If the subject Entity is the issuer of a Subordinate Statement of the chain, its type is `federation_entity`.
+- If the subject Entity is the issuer of the final Entity Configuration of the chain, its type is determined by the metadata types declared in that Entity Configuration.
 
 The constraint evaluation process is as follows:
 
