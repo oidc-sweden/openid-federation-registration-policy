@@ -4,6 +4,9 @@
 
 This specification defines an extension to OpenID Federation that extends the JWT Claims Set of Subordinate Statements by specifying the `registration_policy` Claim. This Claim is intended to hold identifiers for one or more registration policies that were applied when registering the subject of a Subordinate Statement as a trusted Entity within the federation.
 
+**Note:** Awaiting the OpenID Connect working group to adapt/reject this specification, it is published in a 1.0 version under the OpenID Connect working group - https://www.oidc.se/specifications/openid-federation-registration-policy-1_0.html. The working copy for that version is oidc-sweden-openid-federation-registration-policy-1_0.md.
+
+
 ## Builds
 
 <!--
